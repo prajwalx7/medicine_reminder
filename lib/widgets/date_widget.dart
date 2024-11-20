@@ -15,7 +15,7 @@ class _DateWidgetState extends State<DateWidget> {
   @override
   void initState() {
     super.initState();
-    _currentDate = DateTime.now(); 
+    _currentDate = DateTime.now();
   }
 
   @override
@@ -23,8 +23,7 @@ class _DateWidgetState extends State<DateWidget> {
     return Text(
       "${DateFormat.MMMM().format(_currentDate)} ${_currentDate.year}",
       style: TextStyle(
-        fontSize: 24.sp,
-        fontWeight: FontWeight.bold,
+        fontSize: 22.sp,
         color: const Color(0xff16423C),
       ),
     );

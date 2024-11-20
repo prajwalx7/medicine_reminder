@@ -41,7 +41,7 @@ class MedicineListState extends State<MedicineList> {
             _currentPage = index;
           });
           widget.onSelect(medicines[index]
-              ['type']!); // Automatically select when page changes
+              ['type']!); 
         },
         itemBuilder: (context, index) {
           final medicine = medicines[index];

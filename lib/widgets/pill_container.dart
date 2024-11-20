@@ -12,19 +12,18 @@ class PillContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(8.r),
       decoration: BoxDecoration(
-        color: const Color(0xffC4DAD2),
-        borderRadius: BorderRadius.horizontal(
-            right: Radius.circular(15.r), left: Radius.circular(15.r)),
+        color: const Color(0xffE9EFEC),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xff16423C), width: 0.4),
       ),
       child: Row(
         children: [
           Container(
-            padding: EdgeInsets.all(24.r),
+            padding: EdgeInsets.all(10.r),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.r),
-              color: const Color(0xffE9EFEC),
+              borderRadius: BorderRadius.circular(12),
+              color: const Color(0xffC4DAD2),
             ),
             child: SvgPicture.asset(
               'assets/svg/${pill.type}.svg',
@@ -34,18 +33,9 @@ class PillContainer extends StatelessWidget {
           ),
           SizedBox(width: 10.w),
           Expanded(
-            // Use Expanded to allow Column to take the remaining space
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Dosage text
-                Text(
-                  pill.dosage,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                ),
-                SizedBox(height: 5.h),
-                // Medicine name text
                 Text(
                   pill.name,
                   style:
@@ -54,20 +44,29 @@ class PillContainer extends StatelessWidget {
                   maxLines: 2,
                 ),
                 SizedBox(height: 5.h),
-                // Time text
-                Row(
-                  children: [
-                    Icon(
-                      Iconsax.clock,
-                      size: 18.sp,
-                    ),
-                    SizedBox(width: 3.w),
-                    Text(
-                      pill.time,
-                      style: TextStyle(
-                          fontSize: 20.sp, fontWeight: FontWeight.bold),
-                    ),
-                  ],
+                // Dosage text
+                Text(
+                  pill.dosage,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                ),
+                SizedBox(height: 5.h),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: 8.0.w),
+            child: Row(
+              children: [
+                Icon(
+                  Iconsax.clock,
+                  size: 18.sp,
+                ),
+                SizedBox(width: 3.w),
+                Text(
+                  pill.time,
+                  style:
+                      TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
                 ),
               ],
             ),

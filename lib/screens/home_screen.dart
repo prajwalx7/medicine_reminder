@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:medicine_reminder/model/medicine_model.dart';
+import 'package:medicine_reminder/screens/profile_screen.dart';
 import 'package:medicine_reminder/widgets/custom_bottom_sheet.dart';
-import 'package:medicine_reminder/widgets/date_widget.dart';
 import 'package:medicine_reminder/widgets/info_container_list.dart';
 import 'package:medicine_reminder/widgets/pill_container.dart';
 
@@ -13,10 +13,10 @@ class HomeScreen extends StatefulWidget {
   final Function(List<PillModel>) onPillsUpdated;
 
   const HomeScreen({
-    Key? key,
+    super.key,
     required this.pills,
     required this.onPillsUpdated,
-  }) : super(key: key);
+  });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -74,30 +74,30 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: TextStyle(fontSize: 42.sp),
                   ),
                   const Spacer(),
-                  Container(
-                    padding: EdgeInsets.all(18.r),
-                    decoration: const BoxDecoration(
-                        color: Color(0xffC4DAD2), shape: BoxShape.circle),
-                    child: Text(
-                      "P",
-                      style: TextStyle(
-                          fontSize: 32.sp,
-                          color: const Color(0xff16423C),
-                          fontWeight: FontWeight.bold),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ProfileScreen()));
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(18.r),
+                      decoration: const BoxDecoration(
+                          color: Color(0xffC4DAD2), shape: BoxShape.circle),
+                      child: Text(
+                        "P",
+                        style: TextStyle(
+                            fontSize: 32.sp,
+                            color: const Color(0xff16423C),
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
             SizedBox(height: 10.h),
-            Padding(
-              padding: EdgeInsets.only(left: 18.0.w),
-              child: const Align(
-                alignment: Alignment.topLeft,
-                child: DateWidget(),
-              ),
-            ),
-            SizedBox(height: 15.h),
             const InfoContainerList(),
             SizedBox(height: 15.h),
             Padding(

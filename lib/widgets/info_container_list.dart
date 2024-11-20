@@ -6,10 +6,10 @@ class InfoContainerList extends StatefulWidget {
   const InfoContainerList({super.key});
 
   @override
-  _InfoContainerListState createState() => _InfoContainerListState();
+  InfoContainerListState createState() => InfoContainerListState();
 }
 
-class _InfoContainerListState extends State<InfoContainerList> {
+class InfoContainerListState extends State<InfoContainerList> {
   final List<Map<String, String>> infoData = [
     {
       "title": "About Diseases",
@@ -84,7 +84,6 @@ class _InfoContainerListState extends State<InfoContainerList> {
       ),
       child: Stack(
         children: [
-          // Image at the very back
           Positioned(
             right: 0,
             child: SvgPicture.asset(
@@ -94,13 +93,11 @@ class _InfoContainerListState extends State<InfoContainerList> {
               fit: BoxFit.contain,
             ),
           ),
-          // Content on top of the image
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Title
                 Text(
                   data['title']!,
                   style: const TextStyle(
@@ -110,7 +107,6 @@ class _InfoContainerListState extends State<InfoContainerList> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                // Description
                 Text(
                   data['description']!,
                   style: TextStyle(
@@ -130,7 +126,10 @@ class _InfoContainerListState extends State<InfoContainerList> {
                 color: Colors.green.shade100,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Text("View More"),
+              child: const Text(
+                "View More",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
           ),
         ],

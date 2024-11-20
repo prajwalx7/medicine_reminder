@@ -40,6 +40,7 @@ dependencies:
   fading_edge_scrollview: ^4.1.1
   flutter_screenutil: ^5.9.3
   smooth_page_indicator: ^1.2.0+3
+  flutter_slidable: ^3.1.1
 
 dev_dependencies:
   flutter_test:

@@ -13,7 +13,7 @@ class CustomBottomSheet extends StatefulWidget {
 }
 
 class _CustomBottomSheetState extends State<CustomBottomSheet> {
-  int _selectedId = DateTime.now().millisecondsSinceEpoch;
+  final int _selectedId = DateTime.now().millisecondsSinceEpoch;
   String _selectedType = 'pill';
   final _nameController = TextEditingController();
   final _dosageController = TextEditingController();
@@ -133,7 +133,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
               child: Column(
                 children: [
                   TextField(
-                    cursorColor: Color(0xff16423C),
+                    cursorColor: const Color(0xff16423C),
                     textInputAction: TextInputAction.next,
                     controller: _nameController,
                     decoration: const InputDecoration(
@@ -151,7 +151,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                   SizedBox(height: 15.h),
                   TextField(
                     textInputAction: TextInputAction.next,
-                    cursorColor: Color(0xff16423C),
+                    cursorColor: const Color(0xff16423C),
                     controller: _dosageController,
                     decoration: const InputDecoration(
                       labelStyle: TextStyle(
@@ -168,7 +168,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                   ),
                   SizedBox(height: 15.h),
                   TextField(
-                    cursorColor: Color(0xff16423C),
+                    cursorColor: const Color(0xff16423C),
                     controller: _timeController,
                     readOnly: true,
                     onTap: _selectTime,
@@ -193,7 +193,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                         style: TextStyle(
                           fontSize: 16.sp,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xff16423C),
+                          color: const Color(0xff16423C),
                         ),
                       ),
                       Switch(
