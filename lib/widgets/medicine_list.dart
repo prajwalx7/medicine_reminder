@@ -40,8 +40,7 @@ class MedicineListState extends State<MedicineList> {
           setState(() {
             _currentPage = index;
           });
-          widget.onSelect(medicines[index]
-              ['type']!); 
+          widget.onSelect(medicines[index]['type']!);
         },
         itemBuilder: (context, index) {
           final medicine = medicines[index];
@@ -60,10 +59,10 @@ class MedicineListState extends State<MedicineList> {
                 Text(
                   medicine['type']!.toUpperCase(),
                   style: TextStyle(
-                    fontSize: 24.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                      fontFamily: 'prompt'),
                 ),
                 SizedBox(height: 15.h),
                 SvgPicture.asset(

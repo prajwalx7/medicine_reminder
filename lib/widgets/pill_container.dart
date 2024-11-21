@@ -12,15 +12,23 @@ class PillContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.all(8.r),
+      margin: EdgeInsets.only(bottom: 3.h),
       decoration: BoxDecoration(
-        color: const Color(0xffE9EFEC),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xff16423C), width: 0.4),
-      ),
+          color: const Color(0xffFFFFFF),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black26,
+              offset: Offset(1, 3),
+              spreadRadius: 1,
+              blurRadius: 10,
+            ),
+          ]),
       child: Row(
         children: [
           Container(
-            padding: EdgeInsets.all(10.r),
+            padding: EdgeInsets.all(8.r),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               color: const Color(0xffC4DAD2),
@@ -38,17 +46,21 @@ class PillContainer extends StatelessWidget {
               children: [
                 Text(
                   pill.name,
-                  style:
-                      TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 20.sp,
+                    fontFamily: 'zen',
+                    fontWeight: FontWeight.bold,
+                  ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
                 ),
                 SizedBox(height: 5.h),
-                // Dosage text
                 Text(
                   pill.dosage,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
+                  style:
+                      const TextStyle(fontFamily: 'kanit', color: Colors.grey),
                 ),
                 SizedBox(height: 5.h),
               ],
@@ -65,8 +77,7 @@ class PillContainer extends StatelessWidget {
                 SizedBox(width: 3.w),
                 Text(
                   pill.time,
-                  style:
-                      TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
+                  style: TextStyle(fontSize: 20.sp, fontFamily: 'kanit'),
                 ),
               ],
             ),

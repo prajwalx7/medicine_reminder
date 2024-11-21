@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -28,7 +29,6 @@ class InfoContainerListState extends State<InfoContainerList> {
     },
   ];
 
-  // PageController to manage the PageView and the current page index
   final PageController _controller = PageController();
 
   @override
@@ -36,21 +36,21 @@ class InfoContainerListState extends State<InfoContainerList> {
     return Column(
       children: [
         SizedBox(
-          height: 180,
+          height: 180.h,
           child: PageView.builder(
             controller: _controller,
             scrollDirection: Axis.horizontal,
             itemCount: infoData.length,
             itemBuilder: (context, index) {
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                padding: EdgeInsets.symmetric(horizontal: 14.0.w),
                 child: infoContainer(context, infoData[index]),
               );
             },
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 8.0),
+          padding: EdgeInsets.only(top: 8.0.h),
           child: SmoothPageIndicator(
             controller: _controller,
             count: infoData.length,
@@ -70,9 +70,9 @@ class InfoContainerListState extends State<InfoContainerList> {
 
   Widget infoContainer(BuildContext context, Map<String, String> data) {
     return Container(
-      width: 330,
+      width: 330.w,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
         color: Colors.white,
         boxShadow: [
           BoxShadow(
@@ -87,32 +87,32 @@ class InfoContainerListState extends State<InfoContainerList> {
           Positioned(
             right: 0,
             child: SvgPicture.asset(
-              height: 200,
-              width: 150,
+              height: 200.h,
+              width: 150.w,
               data['image']!,
               fit: BoxFit.contain,
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(16.0.r),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   data['title']!,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'prompt'),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8.h),
                 Text(
                   data['description']!,
                   style: TextStyle(
-                    color: Colors.grey.shade700,
-                    fontSize: 14,
-                  ),
+                      color: Colors.grey.shade700,
+                      fontSize: 16.sp,
+                      fontFamily: 'kanit'),
                 ),
               ],
             ),
@@ -121,14 +121,15 @@ class InfoContainerListState extends State<InfoContainerList> {
             left: 10,
             bottom: 10,
             child: Container(
-              padding: const EdgeInsets.all(8),
+              padding: EdgeInsets.all(8.r),
               decoration: BoxDecoration(
                 color: Colors.green.shade100,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
               ),
               child: const Text(
                 "View More",
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, fontFamily: 'kanit'),
               ),
             ),
           ),

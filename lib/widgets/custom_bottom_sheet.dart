@@ -61,7 +61,10 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
         _timeController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Please fill all fields'),
+          content: Text(
+            'Please fill all fields',
+            style: TextStyle(fontFamily: 'kanit'),
+          ),
           backgroundColor: Color(0xff16423C),
         ),
       );
@@ -101,6 +104,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                 style: TextStyle(
                   fontSize: 24.sp,
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'prompt',
                   color: const Color(0xff16423C),
                 ),
               ),
@@ -138,8 +142,10 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                     controller: _nameController,
                     decoration: const InputDecoration(
                       labelStyle: TextStyle(
-                          color: Color(0xff16423C),
-                          fontWeight: FontWeight.bold),
+                        color: Color(0xff16423C),
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'kanit',
+                      ),
                       labelText: "Medicine Name",
                       prefixIcon: Icon(Iconsax.note, color: Color(0xff16423C)),
                       border: OutlineInputBorder(),
@@ -155,8 +161,10 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                     controller: _dosageController,
                     decoration: const InputDecoration(
                       labelStyle: TextStyle(
-                          color: Color(0xff16423C),
-                          fontWeight: FontWeight.bold),
+                        color: Color(0xff16423C),
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'kanit',
+                      ),
                       labelText: "Dosage (e.g., 2 capsules or ml)",
                       prefixIcon:
                           Icon(Iconsax.health, color: Color(0xff16423C)),
@@ -175,8 +183,10 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                     decoration: const InputDecoration(
                       labelText: "Time",
                       labelStyle: TextStyle(
-                          color: Color(0xff16423C),
-                          fontWeight: FontWeight.bold),
+                        color: Color(0xff16423C),
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'kanit',
+                      ),
                       prefixIcon: Icon(Iconsax.clock, color: Color(0xff16423C)),
                       border: OutlineInputBorder(),
                       focusedBorder: OutlineInputBorder(
@@ -193,6 +203,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                         style: TextStyle(
                           fontSize: 16.sp,
                           fontWeight: FontWeight.bold,
+                          fontFamily: 'kanit',
                           color: const Color(0xff16423C),
                         ),
                       ),
@@ -223,7 +234,11 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                 onPressed: _handleAddMedicine,
                 child: Text(
                   "Add Medicine",
-                  style: TextStyle(color: Colors.white, fontSize: 18.sp),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.sp,
+                    fontFamily: 'kanit',
+                  ),
                 ),
               ),
             ),

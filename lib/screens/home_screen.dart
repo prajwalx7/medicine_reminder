@@ -71,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Text(
                     "How is your \nhealth today?",
-                    style: TextStyle(fontSize: 42.sp),
+                    style: TextStyle(fontSize: 42.sp, fontFamily: 'prompt'),
                   ),
                   const Spacer(),
                   GestureDetector(
@@ -89,6 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         "P",
                         style: TextStyle(
                             fontSize: 32.sp,
+                            fontFamily: 'prompt',
                             color: const Color(0xff16423C),
                             fontWeight: FontWeight.bold),
                       ),
