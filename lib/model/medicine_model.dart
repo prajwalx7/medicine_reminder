@@ -5,8 +5,8 @@ class PillModel {
   final String time;
   final String type;
   final bool? isNotificationEnabled;
+  bool isTaken;
 
-  // Constructor
   PillModel({
     required this.id,
     required this.name,
@@ -14,5 +14,6 @@ class PillModel {
     required this.time,
     required this.type,
     this.isNotificationEnabled,
+    this.isTaken = false,
   });
 }

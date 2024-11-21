@@ -12,31 +12,32 @@ class PillContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(8.r),
+      padding: EdgeInsets.all(10.r),
       margin: EdgeInsets.only(bottom: 3.h),
       decoration: BoxDecoration(
-          color: const Color(0xffFFFFFF),
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black26,
-              offset: Offset(1, 3),
-              spreadRadius: 1,
-              blurRadius: 10,
-            ),
-          ]),
+        color: const Color(0xffFFFFFF),
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black26,
+            offset: Offset(1, 3),
+            spreadRadius: 1,
+            blurRadius: 10,
+          ),
+        ],
+      ),
       child: Row(
         children: [
           Container(
-            padding: EdgeInsets.all(8.r),
+            padding: EdgeInsets.all(12.r),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               color: const Color(0xffC4DAD2),
             ),
             child: SvgPicture.asset(
               'assets/svg/${pill.type}.svg',
-              height: 60.h,
-              width: 60.w,
+              height: 50.h,
+              width: 50.w,
             ),
           ),
           SizedBox(width: 10.w),
