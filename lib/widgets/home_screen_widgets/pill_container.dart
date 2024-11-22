@@ -15,16 +15,9 @@ class PillContainer extends StatelessWidget {
       padding: EdgeInsets.all(10.r),
       margin: EdgeInsets.only(bottom: 3.h),
       decoration: BoxDecoration(
+        border: Border.all(color: Colors.black.withOpacity(0.5), width: 0.2),
         color: const Color(0xffFFFFFF),
         borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black26,
-            offset: Offset(1, 3),
-            spreadRadius: 1,
-            blurRadius: 10,
-          ),
-        ],
       ),
       child: Row(
         children: [
