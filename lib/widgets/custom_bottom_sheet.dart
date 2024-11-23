@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:medicine_reminder/model/medicine_model.dart';
+import 'package:medicine_reminder/services/alarm_service.dart';
 import 'package:medicine_reminder/widgets/medicine_list.dart';
 
 class CustomBottomSheet extends StatefulWidget {
@@ -80,8 +81,26 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
       isNotificationEnabled: _isNotificationEnabled,
     );
 
-    widget.onAddPill(newPill);
-    Navigator.pop(context);
+    // call alarm service if notifications are enabled
+    if (_isNotificationEnabled && _selectedTime != null) {
+      final now = DateTime.now();
+      final alarmTime = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        _selectedTime!.hour,
+        _selectedTime!.minute,
+      );
+
+      // schedule alarm
+      AlarmService.scheduleAlarm(
+        alarmTime: alarmTime,
+        medicineName: newPill.name,
+      );
+    }
+
+    widget.onAddPill(newPill); 
+    Navigator.pop(context); 
   }
 
   @override
@@ -221,7 +240,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                 ],
               ),
             ),
-            SizedBox(height: 30.h), 
+            SizedBox(height: 30.h),
             Center(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
