@@ -79,8 +79,10 @@ class _TabBarWidgetState extends State<TabBarWidget>
               indicatorColor: const Color(0xff16423C),
               labelColor: Colors.white,
               unselectedLabelColor: Colors.grey,
-              labelStyle:
-                  TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+              labelStyle: TextStyle(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'kanit'),
               tabs: const [
                 Tab(text: "To Take"),
                 Tab(text: "Taken"),
@@ -98,7 +100,10 @@ class _TabBarWidgetState extends State<TabBarWidget>
                   ? Center(
                       child: Text(
                         "No reminders scheduled",
-                        style: TextStyle(fontSize: 18.sp, color: Colors.grey),
+                        style: TextStyle(
+                            fontSize: 18.sp,
+                            color: Colors.grey,
+                            fontFamily: 'kanit'),
                       ),
                     )
                   : Padding(
@@ -119,16 +124,18 @@ class _TabBarWidgetState extends State<TabBarWidget>
                                 endActionPane: ActionPane(
                                   motion: const ScrollMotion(),
                                   children: [
+                                    SizedBox(width: 5.w),
                                     GestureDetector(
                                       onTap: () {
                                         _deletePill(context, pill);
                                       },
                                       child: _buildContainer(
                                         icon: Iconsax.trash,
-                                        color: Colors.red.shade700,
+                                        color: Colors.red.shade400,
                                         label: "Delete",
                                       ),
                                     ),
+                                    SizedBox(width: 5.w),
                                     GestureDetector(
                                       onTap: () {
                                         setState(() {
@@ -137,7 +144,7 @@ class _TabBarWidgetState extends State<TabBarWidget>
                                       },
                                       child: _buildContainer(
                                         icon: Iconsax.tick_circle,
-                                        color: Colors.green.shade700,
+                                        color: Colors.green.shade400,
                                         label: "Taken",
                                       ),
                                     ),
@@ -184,10 +191,9 @@ Widget _buildContainer({
   required String label,
 }) {
   return Column(
-    mainAxisAlignment: MainAxisAlignment.center,
     children: [
       Container(
-        padding: EdgeInsets.all(24.r),
+        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           color: color,

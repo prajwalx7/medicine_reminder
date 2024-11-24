@@ -70,66 +70,83 @@ class InfoContainerListState extends State<InfoContainerList> {
 
   Widget infoContainer(BuildContext context, Map<String, String> data) {
     return Container(
-      width: 330.w,
+      margin: EdgeInsets.symmetric(
+          vertical: 12.h), 
+      padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16.r),
-        color: Colors.white,
+        gradient: LinearGradient(
+          colors: [Colors.white, Colors.grey.shade100],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.shade300,
-            blurRadius: 8,
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
             offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Stack(
+        clipBehavior: Clip.none,
         children: [
           Positioned(
-            right: 0,
+            right: -16,
+            top: 0,
             child: SvgPicture.asset(
-              height: 200.h,
-              width: 150.w,
+              height: 140.h,
+              width: 140.w,
               data['image']!,
               fit: BoxFit.contain,
             ),
           ),
-          Padding(
-            padding: EdgeInsets.all(16.0.r),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  data['title']!,
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'prompt'),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                data['title']!,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 22.sp,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'prompt',
                 ),
-                SizedBox(height: 8.h),
-                Text(
-                  data['description']!,
-                  style: TextStyle(
-                      color: Colors.grey.shade700,
-                      fontSize: 16.sp,
-                      fontFamily: 'kanit'),
+              ),
+              SizedBox(height: 5.h),
+              Text(
+                data['description']!,
+                style: TextStyle(
+                  color: Colors.grey.shade700,
+                  fontSize: 16.sp,
+                  fontFamily: 'kanit',
                 ),
-              ],
-            ),
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+              ),
+              SizedBox(height: 20.h),
+            ],
           ),
           Positioned(
-            left: 10,
-            bottom: 10,
-            child: Container(
-              padding: EdgeInsets.all(8.r),
-              decoration: BoxDecoration(
-                color: Colors.green.shade100,
-                borderRadius: BorderRadius.circular(12.r),
-              ),
-              child: const Text(
-                "View More",
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, fontFamily: 'kanit'),
+            left: -5,
+            bottom: -5,
+            child: GestureDetector(
+              onTap: () {},
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                decoration: BoxDecoration(
+                  color: const Color(0xffC4DAD2),
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                child: Text(
+                  "View More",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.sp,
+                    fontFamily: 'kanit',
+                  ),
+                ),
               ),
             ),
           ),

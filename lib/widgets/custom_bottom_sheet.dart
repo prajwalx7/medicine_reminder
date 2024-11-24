@@ -33,17 +33,38 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
       context: context,
       initialTime: _selectedTime ?? TimeOfDay.now(),
       builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: ThemeData.light().copyWith(
-            primaryColor: const Color(0xff16423C),
-            colorScheme: const ColorScheme.light(
-              primary: Color(0xff16423C),
-            ),
-            buttonTheme: const ButtonThemeData(
-              textTheme: ButtonTextTheme.primary,
-            ),
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            alwaysUse24HourFormat: false,
+            textScaler: const TextScaler.linear(0.9),
           ),
-          child: child!,
+          child: Theme(
+            data: ThemeData.light().copyWith(
+              primaryColor: const Color(0xff16423C),
+              colorScheme: const ColorScheme.light(
+                primary: Color(0xff16423C),
+              ),
+              timePickerTheme: TimePickerThemeData(
+                backgroundColor: Colors.white,
+                hourMinuteColor: const Color(0xff16423C),
+                hourMinuteTextColor: Colors.white,
+                dayPeriodColor: const Color(0xff16423C),
+                dayPeriodTextColor: Colors.white,
+                dialHandColor: const Color(0xff16423C),
+                dialBackgroundColor: Colors.grey[200],
+                hourMinuteShape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+              buttonTheme: const ButtonThemeData(
+                textTheme: ButtonTextTheme.primary,
+              ),
+            ),
+            child: child!,
+          ),
         );
       },
     );
@@ -99,8 +120,8 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
       );
     }
 
-    widget.onAddPill(newPill); 
-    Navigator.pop(context); 
+    widget.onAddPill(newPill);
+    Navigator.pop(context);
   }
 
   @override
@@ -148,6 +169,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                   BoxShadow(
                     color: Colors.black.withOpacity(0.05),
                     blurRadius: 10,
+                    spreadRadius: 10,
                     offset: const Offset(0, 4),
                   ),
                 ],
@@ -155,61 +177,111 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
               padding: EdgeInsets.all(20.r),
               child: Column(
                 children: [
-                  TextField(
-                    cursorColor: const Color(0xff16423C),
-                    textInputAction: TextInputAction.next,
-                    controller: _nameController,
-                    decoration: const InputDecoration(
-                      labelStyle: TextStyle(
-                        color: Color(0xff16423C),
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'kanit',
-                      ),
-                      labelText: "Medicine Name",
-                      prefixIcon: Icon(Iconsax.note, color: Color(0xff16423C)),
-                      border: OutlineInputBorder(),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xff16423C)),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12.r),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 8,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: TextField(
+                      cursorColor: const Color(0xff16423C),
+                      textInputAction: TextInputAction.next,
+                      controller: _nameController,
+                      style: TextStyle(
+                          fontSize: 16.sp,
+                          fontFamily: 'kanit',
+                          color: const Color(0xff16423C)),
+                      decoration: InputDecoration(
+                        labelText: "Medicine Name",
+                        labelStyle: TextStyle(
+                          color: const Color(0xff16423C),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14.sp,
+                        ),
+                        prefixIcon:
+                            const Icon(Iconsax.note, color: Color(0xff16423C)),
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(
+                            horizontal: 15.w, vertical: 12.h),
                       ),
                     ),
                   ),
                   SizedBox(height: 15.h),
-                  TextField(
-                    textInputAction: TextInputAction.next,
-                    cursorColor: const Color(0xff16423C),
-                    controller: _dosageController,
-                    decoration: const InputDecoration(
-                      labelStyle: TextStyle(
-                        color: Color(0xff16423C),
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'kanit',
-                      ),
-                      labelText: "Dosage (e.g., 2 capsules or ml)",
-                      prefixIcon:
-                          Icon(Iconsax.health, color: Color(0xff16423C)),
-                      border: OutlineInputBorder(),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xff16423C)),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12.r),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 8,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: TextField(
+                      cursorColor: const Color(0xff16423C),
+                      textInputAction: TextInputAction.next,
+                      controller: _dosageController,
+                      style: TextStyle(
+                          fontSize: 16.sp,
+                          fontFamily: 'kanit',
+                          color: const Color(0xff16423C)),
+                      decoration: InputDecoration(
+                        labelText: "Dosage (e.g., 2 capsules or ml)",
+                        labelStyle: TextStyle(
+                          color: const Color(0xff16423C),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14.sp,
+                        ),
+                        prefixIcon: const Icon(Iconsax.health,
+                            color: Color(0xff16423C)),
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(
+                            horizontal: 15.w, vertical: 12.h),
                       ),
                     ),
                   ),
                   SizedBox(height: 15.h),
-                  TextField(
-                    cursorColor: const Color(0xff16423C),
-                    controller: _timeController,
-                    readOnly: true,
-                    onTap: _selectTime,
-                    decoration: const InputDecoration(
-                      labelText: "Time",
-                      labelStyle: TextStyle(
-                        color: Color(0xff16423C),
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'kanit',
-                      ),
-                      prefixIcon: Icon(Iconsax.clock, color: Color(0xff16423C)),
-                      border: OutlineInputBorder(),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xff16423C)),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12.r),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 8,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: TextField(
+                      cursorColor: const Color(0xff16423C),
+                      controller: _timeController,
+                      readOnly: true,
+                      onTap: _selectTime,
+                      style: TextStyle(
+                          fontSize: 16.sp,
+                          fontFamily: 'kanit',
+                          color: const Color(0xff16423C)),
+                      decoration: InputDecoration(
+                        labelText: "Time",
+                        labelStyle: TextStyle(
+                          color: const Color(0xff16423C),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14.sp,
+                        ),
+                        prefixIcon:
+                            const Icon(Iconsax.clock, color: Color(0xff16423C)),
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(
+                            horizontal: 15.w, vertical: 12.h),
                       ),
                     ),
                   ),

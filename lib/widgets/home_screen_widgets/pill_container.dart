@@ -12,71 +12,86 @@ class PillContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10.r),
-      margin: EdgeInsets.only(bottom: 3.h),
+      margin: EdgeInsets.only(bottom: 10.h),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.black.withOpacity(0.5), width: 0.2),
-        color: const Color(0xffFFFFFF),
-        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16.r),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 10,
+            offset: Offset(0, 4),
+          ),
+        ],
       ),
-      child: Row(
-        children: [
-          Container(
-            padding: EdgeInsets.all(12.r),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: const Color(0xffC4DAD2),
+      child: Padding(
+        padding: EdgeInsets.all(12.r),
+        child: Row(
+          children: [
+            Container(
+              height: 60.h,
+              width: 60.w,
+              decoration: BoxDecoration(
+                color: const Color(0xffC4DAD2),
+                borderRadius: BorderRadius.circular(12.r),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(8.r),
+                child: SvgPicture.asset(
+                  'assets/svg/${pill.type}.svg',
+                  height: 40.h,
+                  width: 40.w,
+                ),
+              ),
             ),
-            child: SvgPicture.asset(
-              'assets/svg/${pill.type}.svg',
-              height: 50.h,
-              width: 50.w,
-            ),
-          ),
-          SizedBox(width: 10.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  pill.name,
-                  style: TextStyle(
-                    fontSize: 20.sp,
-                    fontFamily: 'zen',
-                    fontWeight: FontWeight.bold,
+            SizedBox(width: 15.w),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    pill.name,
+                    style: TextStyle(
+                      fontSize: 18.sp,
+                      fontFamily: 'zen',
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xff16423C),
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                ),
-                SizedBox(height: 5.h),
-                Text(
-                  pill.dosage,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                  style:
-                      const TextStyle(fontFamily: 'kanit', color: Colors.grey),
-                ),
-                SizedBox(height: 5.h),
-              ],
+                  SizedBox(height: 8.h),
+                  Text(
+                    pill.dosage,
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      fontFamily: 'kanit',
+                      color: Colors.grey,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(right: 8.0.w),
-            child: Row(
+            Row(
               children: [
                 Icon(
                   Iconsax.clock,
-                  size: 18.sp,
+                  color: const Color(0xff16423C),
+                  size: 20.sp,
                 ),
-                SizedBox(width: 3.w),
+                SizedBox(width: 5.w),
                 Text(
                   pill.time,
-                  style: TextStyle(fontSize: 20.sp, fontFamily: 'kanit'),
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontFamily: 'kanit',
+                    color: const Color(0xff16423C),
+                  ),
                 ),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
