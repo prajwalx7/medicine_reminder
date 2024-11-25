@@ -1,11 +1,22 @@
+import 'dart:io';
+
 import 'package:alarm/alarm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:medicine_reminder/screens/home_screen_wrapper.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Alarm.init();
+  if (Platform.isAndroid) {
+    final permission = await Permission.notification.request();
+    if (permission.isGranted) {
+      print("Notification permission granted");
+    } else {
+      print("Notification permission denied");
+    }
+  }
   runApp(const MyApp());
 }
 
@@ -20,6 +31,10 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Medicine Reminder',
         theme: ThemeData(
+          textSelectionTheme: const TextSelectionThemeData(
+            selectionColor: Colors.amber,
+            selectionHandleColor: Color(0xff16423C),
+          ),
           primaryColor: const Color(0xff16423C),
           scaffoldBackgroundColor: const Color(0xffE9EFEC),
         ),

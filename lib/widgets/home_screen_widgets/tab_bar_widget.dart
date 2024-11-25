@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:medicine_reminder/model/medicine_model.dart';
+import 'package:medicine_reminder/services/alarm_service.dart';
 import 'package:medicine_reminder/widgets/home_screen_widgets/pill_container.dart';
 
 class TabBarWidget extends StatefulWidget {
@@ -31,8 +32,13 @@ class _TabBarWidgetState extends State<TabBarWidget>
   }
 
   void _deletePill(BuildContext context, PillModel pill) {
+
+    AlarmService.cancelAlarm(pill.id);
+
     final updatedPills = List<PillModel>.from(widget.pills)..remove(pill);
     widget.onPillsUpdated(updatedPills);
+
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('${pill.name} deleted'),
@@ -173,7 +179,30 @@ class _TabBarWidgetState extends State<TabBarWidget>
                         itemCount: takenPills.length,
                         itemBuilder: (context, index) {
                           final pill = takenPills[index];
-                          return PillContainer(pill: pill);
+                          return Padding(
+                            padding: EdgeInsets.only(bottom: 10.0.w),
+                            child: Slidable(
+                              key: Key(pill.id.toString()),
+                              endActionPane: ActionPane(
+                                motion: const ScrollMotion(),
+                                extentRatio: 0.30,
+                                children: [
+                                  SizedBox(width: 5.w),
+                                  GestureDetector(
+                                    onTap: () {
+                                      _deletePill(context, pill);
+                                    },
+                                    child: _buildContainer(
+                                      icon: Iconsax.trash,
+                                      color: Colors.red.shade400,
+                                      label: "Delete",
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              child: PillContainer(pill: pill),
+                            ),
+                          );
                         },
                       ),
                     ),

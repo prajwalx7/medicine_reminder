@@ -4,7 +4,6 @@ class PillModel {
   final String dosage;
   final String time;
   final String type;
-  final bool? isNotificationEnabled;
   bool isTaken;
 
   PillModel({
@@ -13,7 +12,6 @@ class PillModel {
     required this.dosage,
     required this.time,
     required this.type,
-    this.isNotificationEnabled,
-    this.isTaken = false,
+    this.isTaken = false, required List<bool> selectedDays,
   });
 }

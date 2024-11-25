@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:medicine_reminder/model/medicine_model.dart';
 import 'package:medicine_reminder/services/alarm_service.dart';
-import 'package:medicine_reminder/widgets/medicine_list.dart';
+import 'package:medicine_reminder/widgets/bottom_sheet_widgets/bottom_sheet_header.dart';
+import 'package:medicine_reminder/widgets/bottom_sheet_widgets/custom_text_fields.dart';
 
 class CustomBottomSheet extends StatefulWidget {
   final Function(PillModel) onAddPill;
@@ -14,77 +14,28 @@ class CustomBottomSheet extends StatefulWidget {
 }
 
 class _CustomBottomSheetState extends State<CustomBottomSheet> {
-  final int _selectedId = DateTime.now().millisecondsSinceEpoch;
-  String _selectedType = 'pill';
   final _nameController = TextEditingController();
   final _dosageController = TextEditingController();
-  final _timeController = TextEditingController();
-  TimeOfDay? _selectedTime;
-  bool _isNotificationEnabled = false;
+  List<TextEditingController> timeControllers = [];
+  String _selectedType = 'pill';
+  final List<TimeOfDay?> _selectedTimes = [null, null, null];
+  final List<bool> _selectedDays = List.generate(7, (index) => false);
 
-  void _updateSelectedType(String type) {
-    setState(() {
-      _selectedType = type;
-    });
-  }
-
-  Future<void> _selectTime() async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: _selectedTime ?? TimeOfDay.now(),
-      builder: (BuildContext context, Widget? child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            alwaysUse24HourFormat: false,
-            textScaler: const TextScaler.linear(0.9),
-          ),
-          child: Theme(
-            data: ThemeData.light().copyWith(
-              primaryColor: const Color(0xff16423C),
-              colorScheme: const ColorScheme.light(
-                primary: Color(0xff16423C),
-              ),
-              timePickerTheme: TimePickerThemeData(
-                backgroundColor: Colors.white,
-                hourMinuteColor: const Color(0xff16423C),
-                hourMinuteTextColor: Colors.white,
-                dayPeriodColor: const Color(0xff16423C),
-                dayPeriodTextColor: Colors.white,
-                dialHandColor: const Color(0xff16423C),
-                dialBackgroundColor: Colors.grey[200],
-                hourMinuteShape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-              buttonTheme: const ButtonThemeData(
-                textTheme: ButtonTextTheme.primary,
-              ),
-            ),
-            child: child!,
-          ),
-        );
-      },
-    );
-
-    if (picked != null) {
-      setState(() {
-        _selectedTime = picked;
-        _timeController.text = picked.format(context);
-      });
-    }
+  @override
+  void initState() {
+    super.initState();
+    timeControllers = List.generate(3, (index) => TextEditingController());
   }
 
   void _handleAddMedicine() {
     if (_nameController.text.isEmpty ||
         _dosageController.text.isEmpty ||
-        _timeController.text.isEmpty) {
+        (timeControllers.every((controller) => controller.text.isEmpty)) ||
+        (!_selectedDays.contains(true))) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
-            'Please fill all fields',
+            'Please fill required fields and select at least one day',
             style: TextStyle(fontFamily: 'kanit'),
           ),
           backgroundColor: Color(0xff16423C),
@@ -93,35 +44,56 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
       return;
     }
 
+    final List<String> selectedTimes = timeControllers
+        .where((controller) => controller.text.isNotEmpty)
+        .map((controller) => controller.text)
+        .toList();
+
+    
+    final int pillId = DateTime.now().millisecondsSinceEpoch;
+
     final newPill = PillModel(
-      id: _selectedId,
+      id: pillId,
       type: _selectedType,
       name: _nameController.text,
       dosage: _dosageController.text,
-      time: _timeController.text,
-      isNotificationEnabled: _isNotificationEnabled,
+      time: selectedTimes.join('\n'),
+      selectedDays: _selectedDays,
     );
 
-    // call alarm service if notifications are enabled
-    if (_isNotificationEnabled && _selectedTime != null) {
-      final now = DateTime.now();
-      final alarmTime = DateTime(
-        now.year,
-        now.month,
-        now.day,
-        _selectedTime!.hour,
-        _selectedTime!.minute,
-      );
+    for (int i = 0; i < _selectedTimes.length; i++) {
+      if (_selectedTimes[i] != null) {
+        for (int dayIndex = 0; dayIndex < _selectedDays.length; dayIndex++) {
+          if (_selectedDays[dayIndex]) {
+            final now = DateTime.now();
+            final alarmTime = DateTime(
+              now.year,
+              now.month,
+              now.day,
+              _selectedTimes[i]!.hour,
+              _selectedTimes[i]!.minute,
+            );
 
-      // schedule alarm
-      AlarmService.scheduleAlarm(
-        alarmTime: alarmTime,
-        medicineName: newPill.name,
-      );
+        
+            AlarmService.scheduleAlarm(
+              pillId: pillId,
+              alarmTime: alarmTime,
+              medicineName: newPill.name,
+              dayOfWeek: dayIndex + 1,
+            );
+          }
+        }
+      }
     }
 
     widget.onAddPill(newPill);
     Navigator.pop(context);
+  }
+
+  void _updateSelectedType(String type) {
+    setState(() {
+      _selectedType = type;
+    });
   }
 
   @override
@@ -138,179 +110,14 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Center(
-              child: Text(
-                "Add New Medicine",
-                style: TextStyle(
-                  fontSize: 24.sp,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'prompt',
-                  color: const Color(0xff16423C),
-                ),
-              ),
-            ),
+            BottomSheetHeader(onSelect: _updateSelectedType),
             SizedBox(height: 20.h),
-            Container(
-              height: 250.h,
-              decoration: BoxDecoration(
-                color: const Color(0xff1B4543),
-                borderRadius: BorderRadius.circular(18.r),
-              ),
-              child: MedicineList(
-                onSelect: _updateSelectedType,
-              ),
-            ),
-            SizedBox(height: 20.h),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12.r),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 10,
-                    spreadRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              padding: EdgeInsets.all(20.r),
-              child: Column(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12.r),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 8,
-                          offset: Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: TextField(
-                      cursorColor: const Color(0xff16423C),
-                      textInputAction: TextInputAction.next,
-                      controller: _nameController,
-                      style: TextStyle(
-                          fontSize: 16.sp,
-                          fontFamily: 'kanit',
-                          color: const Color(0xff16423C)),
-                      decoration: InputDecoration(
-                        labelText: "Medicine Name",
-                        labelStyle: TextStyle(
-                          color: const Color(0xff16423C),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14.sp,
-                        ),
-                        prefixIcon:
-                            const Icon(Iconsax.note, color: Color(0xff16423C)),
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: 15.w, vertical: 12.h),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 15.h),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12.r),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 8,
-                          offset: Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: TextField(
-                      cursorColor: const Color(0xff16423C),
-                      textInputAction: TextInputAction.next,
-                      controller: _dosageController,
-                      style: TextStyle(
-                          fontSize: 16.sp,
-                          fontFamily: 'kanit',
-                          color: const Color(0xff16423C)),
-                      decoration: InputDecoration(
-                        labelText: "Dosage (e.g., 2 capsules or ml)",
-                        labelStyle: TextStyle(
-                          color: const Color(0xff16423C),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14.sp,
-                        ),
-                        prefixIcon: const Icon(Iconsax.health,
-                            color: Color(0xff16423C)),
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: 15.w, vertical: 12.h),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 15.h),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12.r),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 8,
-                          offset: Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: TextField(
-                      cursorColor: const Color(0xff16423C),
-                      controller: _timeController,
-                      readOnly: true,
-                      onTap: _selectTime,
-                      style: TextStyle(
-                          fontSize: 16.sp,
-                          fontFamily: 'kanit',
-                          color: const Color(0xff16423C)),
-                      decoration: InputDecoration(
-                        labelText: "Time",
-                        labelStyle: TextStyle(
-                          color: const Color(0xff16423C),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14.sp,
-                        ),
-                        prefixIcon:
-                            const Icon(Iconsax.clock, color: Color(0xff16423C)),
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: 15.w, vertical: 12.h),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 15.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Enable Notification",
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'kanit',
-                          color: const Color(0xff16423C),
-                        ),
-                      ),
-                      Switch(
-                        value: _isNotificationEnabled,
-                        onChanged: (value) {
-                          setState(() {
-                            _isNotificationEnabled = value;
-                          });
-                        },
-                        activeColor: const Color(0xff16423C),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+            CustomTextFields(
+              nameController: _nameController,
+              dosageController: _dosageController,
+              timeControllers: timeControllers,
+              selectedTimes: _selectedTimes,
+              selectedDays: _selectedDays,
             ),
             SizedBox(height: 30.h),
             Center(
@@ -333,7 +140,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                 ),
               ),
             ),
-            SizedBox(height: 20.h),
+            SizedBox(height: 40.h),
           ],
         ),
       ),
@@ -344,7 +151,9 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
   void dispose() {
     _nameController.dispose();
     _dosageController.dispose();
-    _timeController.dispose();
+    for (var controller in timeControllers) {
+      controller.dispose();
+    }
     super.dispose();
   }
 }
