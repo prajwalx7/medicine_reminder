@@ -1,12 +1,46 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:medicine_reminder/screens/home_screen_wrapper.dart';
 import 'package:medicine_reminder/screens/otp_screeen.dart';
 
 class MobileNumberScreen extends StatelessWidget {
   final TextEditingController mobileController = TextEditingController();
 
   MobileNumberScreen({super.key});
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<void> _sendOtp(BuildContext context) async {
+    final phoneNumber = "+91${mobileController.text.trim()}";
+    try {
+      await _auth.verifyPhoneNumber(
+          phoneNumber: phoneNumber,
+          verificationCompleted: (PhoneAuthCredential credential) async {
+            await _auth.signInWithCredential(credential);
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const HomeScreenWrapper()));
+          },
+          verificationFailed: (FirebaseAuthException e) {
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Verification failed ${e.message}")));
+          },
+          codeSent: (String verificationId, int? resendToken) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => OtpScreen(
+                          phoneNumber: phoneNumber,
+                          verificationId: verificationId,
+                        )));
+          },
+          codeAutoRetrievalTimeout: (String verificationId) {});
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Failed to send OTP: $e")));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,14 +101,7 @@ class MobileNumberScreen extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => OtpScreen(
-                        phoneNumber: mobileController.text,
-                      ),
-                    ),
-                  );
+                  _sendOtp(context);
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,

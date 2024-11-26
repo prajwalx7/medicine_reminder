@@ -1,4 +1,4 @@
-// Screen 2: OTP Verification
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:medicine_reminder/screens/home_screen_wrapper.dart';
@@ -6,8 +6,10 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 
 class OtpScreen extends StatefulWidget {
   final String phoneNumber;
+  final String verificationId;
 
-  const OtpScreen({super.key, required this.phoneNumber});
+  const OtpScreen(
+      {super.key, required this.phoneNumber, required this.verificationId});
 
   @override
   OtpScreenState createState() => OtpScreenState();
@@ -16,6 +18,22 @@ class OtpScreen extends StatefulWidget {
 class OtpScreenState extends State<OtpScreen> {
   final TextEditingController otpController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<void> _verifyOtp(BuildContext context) async {
+    try {
+      final credential = PhoneAuthProvider.credential(
+        verificationId: widget.verificationId,
+        smsCode: otpController.text.trim(),
+      );
+      await _auth.signInWithCredential(credential);
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const HomeScreenWrapper()));
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Invalid OTP: $e")));
+    }
+  }
 
   @override
   void initState() {
@@ -132,12 +150,7 @@ class OtpScreenState extends State<OtpScreen> {
                 ),
               ),
               onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const HomeScreenWrapper(),
-                  ),
-                );
+                _verifyOtp(context);
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
