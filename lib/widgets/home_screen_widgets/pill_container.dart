@@ -2,16 +2,41 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:intl/intl.dart';
 import 'package:medicine_reminder/model/pill_model.dart';
 
 class PillContainer extends StatelessWidget {
   final PillModel pill;
-  
 
   const PillContainer({super.key, required this.pill});
 
+  String convertTimes(List<int> times) {
+    String formattedTimes = "";
+
+    for (var timestamp in times) {
+      if (timestamp != 0) {
+        // Convert microseconds to milliseconds if needed
+        int timestampInMilliseconds =
+            (timestamp > 999999999999) ? (timestamp / 1000).round() : timestamp;
+
+        DateTime dateTime =
+            DateTime.fromMillisecondsSinceEpoch(timestampInMilliseconds);
+
+        // Format the time in 12-hour format with AM/PM
+        String timeString = DateFormat('h:mm a').format(dateTime);
+
+        // Add to the formatted times string
+        formattedTimes += "$timeString\n";
+      }
+    }
+
+    return formattedTimes.trim(); // Trim to remove the last newline
+  }
+
   @override
   Widget build(BuildContext context) {
+    var t = convertTimes(pill.intTime);
+    print("time : ${t}");
     return Container(
       margin: EdgeInsets.only(bottom: 10.h),
       decoration: BoxDecoration(
@@ -82,7 +107,7 @@ class PillContainer extends StatelessWidget {
                 ),
                 SizedBox(width: 5.w),
                 Text(
-                  pill.time,
+                  convertTimes(pill.intTime),
                   style: TextStyle(
                     fontSize: 16.sp,
                     fontFamily: 'kanit',
@@ -90,16 +115,15 @@ class PillContainer extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-      onTap: () {
-        pill.isTaken = !pill.isTaken;
-        pill.save();
-      },
-      child: Icon(
-        pill.isTaken ? Icons.check_circle : Icons.circle_outlined,
-        color: pill.isTaken ? Colors.green : Colors.grey,
-        size: 24.sp,
-      ),
-    ),
+                  onTap: () {
+                    pill.isTaken = !pill.isTaken;
+                  },
+                  child: Icon(
+                    pill.isTaken ? Icons.check_circle : Icons.circle_outlined,
+                    color: pill.isTaken ? Colors.green : Colors.grey,
+                    size: 24.sp,
+                  ),
+                ),
               ],
             ),
           ],

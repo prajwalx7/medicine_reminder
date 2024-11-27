@@ -2,11 +2,12 @@ import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:hive/hive.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:medicine_reminder/constant.dart';
 import 'package:medicine_reminder/model/pill_model.dart';
 import 'package:medicine_reminder/services/alarm_service.dart';
 import 'package:medicine_reminder/widgets/home_screen_widgets/pill_container.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TabBarWidget extends StatefulWidget {
   final List<PillModel> pills;
@@ -26,38 +27,26 @@ class _TabBarWidgetState extends State<TabBarWidget>
     with SingleTickerProviderStateMixin {
   ScrollController controller = ScrollController();
   late TabController _tabController;
-  late Box<PillModel> pillsBox; // Declare the Hive box
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    _openPillsBox(); // Open the box here
-  }
-
-  Future<void> _openPillsBox() async {
-    pillsBox = await Hive.openBox<PillModel>(
-        'pillsBox'); // Open the box asynchronously
-    _loadPills(); // Load the pills from the box after it's opened
   }
 
   void _addNewPill(PillModel pill) {
-    pillsBox.add(pill); // Add new pill to Hive
-
     // Update your pills list and call the callback function
     widget.onPillsUpdated(widget.pills);
   }
 
-  void _loadPills() {
-    setState(() {
-      widget.pills.addAll(pillsBox.values); // Load pills from the opened box
-    });
-  }
-
-  void _deletePill(BuildContext context, PillModel pill) {
+  void _deletePill(BuildContext context, PillModel pill) async {
     AlarmService.cancelAlarm(pill.id);
 
     final updatedPills = List<PillModel>.from(widget.pills)..remove(pill);
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    prefs.setStringList(
+        PILLS_KEY, updatedPills.map((p) => p.toJson().toString()).toList());
     widget.onPillsUpdated(updatedPills);
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -72,8 +61,6 @@ class _TabBarWidgetState extends State<TabBarWidget>
     setState(() {
       pill.isTaken = true; // Mark pill as taken
     });
-
-    pillsBox.put(pill.id, pill); // Update pill in Hive
 
     widget.onPillsUpdated(widget.pills);
     ScaffoldMessenger.of(context).showSnackBar(

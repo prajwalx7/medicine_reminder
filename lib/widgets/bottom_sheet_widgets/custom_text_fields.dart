@@ -8,15 +8,16 @@ class CustomTextFields extends StatefulWidget {
   final List<TextEditingController> timeControllers;
   final List<TimeOfDay?> selectedTimes;
   final List<bool> selectedDays;
+  final timeCB;
 
-  const CustomTextFields({
-    super.key,
-    required this.nameController,
-    required this.dosageController,
-    required this.timeControllers,
-    required this.selectedTimes,
-    required this.selectedDays,
-  });
+  const CustomTextFields(
+      {super.key,
+      required this.nameController,
+      required this.dosageController,
+      required this.timeControllers,
+      required this.selectedTimes,
+      required this.selectedDays,
+      required this.timeCB});
 
   @override
   State<CustomTextFields> createState() => _CustomTextFieldsState();
@@ -58,8 +59,8 @@ class _CustomTextFieldsState extends State<CustomTextFields> {
         );
       },
     );
-
     if (picked != null) {
+      widget.timeCB(picked, index);
       setState(() {
         widget.selectedTimes[index] = picked;
         final hour = picked.hourOfPeriod;
@@ -303,7 +304,8 @@ class _CustomTextFieldsState extends State<CustomTextFields> {
               Expanded(
                 flex: 2,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12.r),

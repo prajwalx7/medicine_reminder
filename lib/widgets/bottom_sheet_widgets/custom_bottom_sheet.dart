@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:medicine_reminder/constant.dart';
 import 'package:medicine_reminder/model/pill_model.dart';
 import 'package:medicine_reminder/services/alarm_service.dart';
 import 'package:medicine_reminder/widgets/bottom_sheet_widgets/bottom_sheet_header.dart';
 import 'package:medicine_reminder/widgets/bottom_sheet_widgets/custom_text_fields.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomBottomSheet extends StatefulWidget {
   final Function(PillModel) onAddPill;
@@ -20,6 +21,8 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
   List<TextEditingController> timeControllers = [];
   String _selectedType = 'pill';
   final List<TimeOfDay?> _selectedTimes = [null, null, null];
+  final List<int> _intTime = [0, 0, 0];
+
   final List<bool> _selectedDays = List.generate(7, (index) => false);
 
   @override
@@ -52,21 +55,29 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
         .map((controller) => controller.text)
         .toList();
 
+    print("time : ${selectedTimes}");
+
     final int pillId = DateTime.now().millisecondsSinceEpoch & 0xFFFFFFFF;
 
     final newPill = PillModel(
-      id: pillId,
-      type: _selectedType,
-      name: _nameController.text,
-      dosage: _dosageController.text,
-      time: selectedTimes.join('\n'),
-      selectedDays: _selectedDays,
-    );
+        id: pillId,
+        type: _selectedType,
+        name: _nameController.text,
+        dosage: _dosageController.text,
+        selectedDays: _selectedDays,
+        intTime: _intTime);
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    // Saves pill in Hive
-    final box = Hive.box<PillModel>('pillBox');
-    await box.put(pillId, newPill);
-
+    var tempPills = prefs.getStringList(PILLS_KEY);
+    var pills = [];
+    if (tempPills != null) {
+      pills = tempPills;
+    }
+    print("pills : ${pills}");
+    print("new pill : ${newPill.toJson().toString()}");
+    var s = await prefs
+        .setStringList(PILLS_KEY, [newPill.toJson().toString(), ...pills]);
+    print('status : $s');
     for (int i = 0; i < _selectedTimes.length; i++) {
       if (_selectedTimes[i] != null) {
         for (int dayIndex = 0; dayIndex < _selectedDays.length; dayIndex++) {
@@ -101,6 +112,13 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
     });
   }
 
+  int timeOfDayToDateTime(TimeOfDay timeOfDay) {
+    final now = DateTime.now();
+    return DateTime(
+            now.year, now.month, now.day, timeOfDay.hour, timeOfDay.minute)
+        .microsecondsSinceEpoch;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -123,6 +141,9 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
               timeControllers: timeControllers,
               selectedTimes: _selectedTimes,
               selectedDays: _selectedDays,
+              timeCB: (TimeOfDay time, index) {
+                _intTime[index] = timeOfDayToDateTime(time);
+              },
             ),
             SizedBox(height: 30.h),
             Center(
