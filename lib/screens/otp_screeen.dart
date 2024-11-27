@@ -150,7 +150,10 @@ class OtpScreenState extends State<OtpScreen> {
                 ),
               ),
               onPressed: () {
-                _verifyOtp(context);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HomeScreenWrapper()));
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

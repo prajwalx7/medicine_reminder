@@ -19,8 +19,10 @@ class MobileNumberScreen extends StatelessWidget {
           phoneNumber: phoneNumber,
           verificationCompleted: (PhoneAuthCredential credential) async {
             await _auth.signInWithCredential(credential);
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const HomeScreenWrapper()));
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const HomeScreenWrapper()));
           },
           verificationFailed: (FirebaseAuthException e) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -101,7 +103,11 @@ class MobileNumberScreen extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  _sendOtp(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const OtpScreen(
+                              phoneNumber: '', verificationId: '')));
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,

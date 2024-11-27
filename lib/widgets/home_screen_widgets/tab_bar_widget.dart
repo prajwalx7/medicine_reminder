@@ -2,14 +2,16 @@ import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:hive/hive.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:medicine_reminder/model/medicine_model.dart';
+import 'package:medicine_reminder/model/pill_model.dart';
 import 'package:medicine_reminder/services/alarm_service.dart';
 import 'package:medicine_reminder/widgets/home_screen_widgets/pill_container.dart';
 
 class TabBarWidget extends StatefulWidget {
   final List<PillModel> pills;
   final Function(List<PillModel>) onPillsUpdated;
+
   const TabBarWidget({
     super.key,
     required this.pills,
@@ -24,20 +26,39 @@ class _TabBarWidgetState extends State<TabBarWidget>
     with SingleTickerProviderStateMixin {
   ScrollController controller = ScrollController();
   late TabController _tabController;
+  late Box<PillModel> pillsBox; // Declare the Hive box
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _openPillsBox(); // Open the box here
+  }
+
+  Future<void> _openPillsBox() async {
+    pillsBox = await Hive.openBox<PillModel>(
+        'pillsBox'); // Open the box asynchronously
+    _loadPills(); // Load the pills from the box after it's opened
+  }
+
+  void _addNewPill(PillModel pill) {
+    pillsBox.add(pill); // Add new pill to Hive
+
+    // Update your pills list and call the callback function
+    widget.onPillsUpdated(widget.pills);
+  }
+
+  void _loadPills() {
+    setState(() {
+      widget.pills.addAll(pillsBox.values); // Load pills from the opened box
+    });
   }
 
   void _deletePill(BuildContext context, PillModel pill) {
-
     AlarmService.cancelAlarm(pill.id);
 
     final updatedPills = List<PillModel>.from(widget.pills)..remove(pill);
     widget.onPillsUpdated(updatedPills);
-
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -49,8 +70,11 @@ class _TabBarWidgetState extends State<TabBarWidget>
 
   void _markAsTaken(PillModel pill) {
     setState(() {
-      pill.isTaken = true;
+      pill.isTaken = true; // Mark pill as taken
     });
+
+    pillsBox.put(pill.id, pill); // Update pill in Hive
+
     widget.onPillsUpdated(widget.pills);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -64,6 +88,7 @@ class _TabBarWidgetState extends State<TabBarWidget>
   Widget build(BuildContext context) {
     final notTakenPills = widget.pills.where((pill) => !pill.isTaken).toList();
     final takenPills = widget.pills.where((pill) => pill.isTaken).toList();
+
     return Column(
       children: [
         Padding(
@@ -101,7 +126,7 @@ class _TabBarWidgetState extends State<TabBarWidget>
           child: TabBarView(
             controller: _tabController,
             children: [
-              //not taken pils
+              // Not taken pills
               notTakenPills.isEmpty
                   ? Center(
                       child: Text(
@@ -144,9 +169,7 @@ class _TabBarWidgetState extends State<TabBarWidget>
                                     SizedBox(width: 5.w),
                                     GestureDetector(
                                       onTap: () {
-                                        setState(() {
-                                          _markAsTaken(pill);
-                                        });
+                                        _markAsTaken(pill);
                                       },
                                       child: _buildContainer(
                                         icon: Iconsax.tick_circle,
@@ -156,7 +179,9 @@ class _TabBarWidgetState extends State<TabBarWidget>
                                     ),
                                   ],
                                 ),
-                                child: PillContainer(pill: pill),
+                                child: PillContainer(
+                                  pill: pill,
+                                ),
                               ),
                             );
                           },
@@ -212,37 +237,37 @@ class _TabBarWidgetState extends State<TabBarWidget>
       ],
     );
   }
-}
 
-Widget _buildContainer({
-  required IconData icon,
-  required Color color,
-  required String label,
-}) {
-  return Column(
-    children: [
-      Container(
-        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: color,
-        ),
-        child: Column(
-          children: [
-            Icon(icon, color: Colors.white),
-            SizedBox(height: 5.h),
-            Text(
-              label,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w500,
-                fontFamily: 'kanit',
+  Widget _buildContainer({
+    required IconData icon,
+    required Color color,
+    required String label,
+  }) {
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: color,
+          ),
+          child: Column(
+            children: [
+              Icon(icon, color: Colors.white),
+              SizedBox(height: 5.h),
+              Text(
+                label,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'kanit',
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    ],
-  );
+      ],
+    );
+  }
 }

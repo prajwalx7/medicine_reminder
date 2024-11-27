@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:medicine_reminder/model/medicine_model.dart';
-import 'package:medicine_reminder/widgets/custom_bottom_sheet.dart';
+import 'package:medicine_reminder/model/pill_model.dart';
+import 'package:medicine_reminder/widgets/bottom_sheet_widgets/custom_bottom_sheet.dart';
 import 'package:medicine_reminder/widgets/home_screen_widgets/header.dart';
 import 'package:medicine_reminder/widgets/home_screen_widgets/info_container_list.dart';
 import 'package:medicine_reminder/widgets/home_screen_widgets/tab_bar_widget.dart';

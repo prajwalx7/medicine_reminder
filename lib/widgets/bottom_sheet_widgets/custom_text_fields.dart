@@ -33,16 +33,10 @@ class _CustomTextFieldsState extends State<CustomTextFields> {
       initialTime: widget.selectedTimes[index] ?? TimeOfDay.now(),
       builder: (BuildContext context, Widget? child) {
         return MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            alwaysUse24HourFormat: false,
-            textScaler: const TextScaler.linear(0.9),
-          ),
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
           child: Theme(
             data: ThemeData.light().copyWith(
               primaryColor: const Color(0xff16423C),
-              colorScheme: const ColorScheme.light(
-                primary: Color(0xff16423C),
-              ),
               timePickerTheme: TimePickerThemeData(
                 backgroundColor: Colors.white,
                 hourMinuteColor: const Color(0xff16423C),
@@ -222,7 +216,7 @@ class _CustomTextFieldsState extends State<CustomTextFields> {
       padding: EdgeInsets.all(20.r),
       child: Column(
         children: [
-          // Name and Dosage fields remain the same
+          // Medicine Name
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -237,7 +231,6 @@ class _CustomTextFieldsState extends State<CustomTextFields> {
             ),
             child: TextField(
               cursorColor: const Color(0xff16423C),
-              textInputAction: TextInputAction.next,
               controller: widget.nameController,
               style: TextStyle(
                 fontSize: 16.sp,
@@ -259,9 +252,10 @@ class _CustomTextFieldsState extends State<CustomTextFields> {
             ),
           ),
           SizedBox(height: 15.h),
+
+          // Dosage
           Row(
             children: [
-              // Dosage Input Container
               Expanded(
                 flex: 3,
                 child: Container(
@@ -305,13 +299,11 @@ class _CustomTextFieldsState extends State<CustomTextFields> {
                   ),
                 ),
               ),
-              SizedBox(width: 10.w), // Spacing between input and dropdown
-
-              // Dropdown Menu
+              SizedBox(width: 10.w),
               Expanded(
                 flex: 2,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10.w),
+                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12.r),
@@ -357,25 +349,18 @@ class _CustomTextFieldsState extends State<CustomTextFields> {
             ],
           ),
           SizedBox(height: 15.h),
-          Align(
-            alignment: Alignment.topLeft,
-            child: Text(
-              "*select at least one time",
-              style: TextStyle(
-                  color: Colors.grey, fontFamily: 'kanit', fontSize: 12.sp),
+
+          // Time Fields
+          ...List.generate(
+            widget.selectedTimes.length,
+            (index) => Padding(
+              padding: EdgeInsets.only(bottom: 15.h),
+              child: _buildTimeField(index),
             ),
           ),
-          SizedBox(height: 5.h),
-          // Multiple time selection fields
-          ...List.generate(3, (index) {
-            return Column(
-              children: [
-                _buildTimeField(index),
-                SizedBox(height: 15.h),
-              ],
-            );
-          }),
-          // Day selector
+          SizedBox(height: 15.h),
+
+          // Day Selector
           _buildDaySelector(),
         ],
       ),

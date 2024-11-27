@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:medicine_reminder/model/medicine_model.dart';
+import 'package:medicine_reminder/model/pill_model.dart';
 
 class PillContainer extends StatelessWidget {
   final PillModel pill;
+  
 
   const PillContainer({super.key, required this.pill});
 
@@ -88,6 +89,17 @@ class PillContainer extends StatelessWidget {
                     color: const Color(0xff16423C),
                   ),
                 ),
+                GestureDetector(
+      onTap: () {
+        pill.isTaken = !pill.isTaken;
+        pill.save();
+      },
+      child: Icon(
+        pill.isTaken ? Icons.check_circle : Icons.circle_outlined,
+        color: pill.isTaken ? Colors.green : Colors.grey,
+        size: 24.sp,
+      ),
+    ),
               ],
             ),
           ],

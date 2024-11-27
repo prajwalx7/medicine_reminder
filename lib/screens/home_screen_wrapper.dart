@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:medicine_reminder/model/medicine_model.dart';
+import 'package:medicine_reminder/model/pill_model.dart';
 import 'package:medicine_reminder/screens/home_screen.dart';
 
 class HomeScreenWrapper extends StatefulWidget {

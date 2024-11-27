@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:medicine_reminder/model/medicine_model.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:medicine_reminder/model/pill_model.dart';
 import 'package:medicine_reminder/services/alarm_service.dart';
 import 'package:medicine_reminder/widgets/bottom_sheet_widgets/bottom_sheet_header.dart';
 import 'package:medicine_reminder/widgets/bottom_sheet_widgets/custom_text_fields.dart';
@@ -27,10 +28,12 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
     timeControllers = List.generate(3, (index) => TextEditingController());
   }
 
-  void _handleAddMedicine() {
+  Future<void> _addMedicine() async {
+    print("pressed");
+
     if (_nameController.text.isEmpty ||
         _dosageController.text.isEmpty ||
-        (timeControllers.every((controller) => controller.text.isEmpty)) ||
+        timeControllers.every((controller) => controller.text.isEmpty) ||
         (!_selectedDays.contains(true))) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -44,13 +47,12 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
       return;
     }
 
-    final List<String> selectedTimes = timeControllers
+    final selectedTimes = timeControllers
         .where((controller) => controller.text.isNotEmpty)
         .map((controller) => controller.text)
         .toList();
 
-    
-    final int pillId = DateTime.now().millisecondsSinceEpoch;
+    final int pillId = DateTime.now().millisecondsSinceEpoch & 0xFFFFFFFF;
 
     final newPill = PillModel(
       id: pillId,
@@ -60,6 +62,10 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
       time: selectedTimes.join('\n'),
       selectedDays: _selectedDays,
     );
+
+    // Saves pill in Hive
+    final box = Hive.box<PillModel>('pillBox');
+    await box.put(pillId, newPill);
 
     for (int i = 0; i < _selectedTimes.length; i++) {
       if (_selectedTimes[i] != null) {
@@ -74,7 +80,6 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
               _selectedTimes[i]!.minute,
             );
 
-        
             AlarmService.scheduleAlarm(
               pillId: pillId,
               alarmTime: alarmTime,
@@ -129,7 +134,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                 ),
-                onPressed: _handleAddMedicine,
+                onPressed: _addMedicine,
                 child: Text(
                   "Add Medicine",
                   style: TextStyle(

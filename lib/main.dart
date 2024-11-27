@@ -3,18 +3,19 @@ import 'package:alarm/alarm.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:medicine_reminder/model/pill_model.dart';
 import 'package:medicine_reminder/screens/mobile_number_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Alarm.init();
-  try {
-    await Firebase.initializeApp();
-    print("Firebase initialized successfully");
-  } catch (e) {
-    print("Firebase initialization error: $e");
-  }
+  await Firebase.initializeApp();
+  await Hive.initFlutter();
+  Hive.registerAdapter(PillModelAdapter());
+  await Hive.openBox<PillModel>('pillBox');
+
   if (Platform.isAndroid) {
     final permission = await Permission.notification.request();
     if (permission.isGranted) {

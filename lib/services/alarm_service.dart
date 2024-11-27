@@ -39,7 +39,7 @@ class AlarmService {
       notificationSettings: NotificationSettings(
         title: 'Medicine Reminder',
         body: 'It\'s time to take your $medicineName!',
-        stopButton: 'Dismiss',
+        stopButton: 'Taken',
       ),
     );
 
