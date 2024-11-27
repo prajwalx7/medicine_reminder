@@ -34,10 +34,10 @@ class _TabBarWidgetState extends State<TabBarWidget>
     _tabController = TabController(length: 2, vsync: this);
   }
 
-  void _addNewPill(PillModel pill) {
-    // Update your pills list and call the callback function
-    widget.onPillsUpdated(widget.pills);
-  }
+  // void _addNewPill(PillModel pill) {
+  //   // Update your pills list and call the callback function
+  //   widget.onPillsUpdated(widget.pills);
+  // }
 
   void _deletePill(BuildContext context, PillModel pill) async {
     AlarmService.cancelAlarm(pill.id);
@@ -57,18 +57,33 @@ class _TabBarWidgetState extends State<TabBarWidget>
     );
   }
 
-  void _markAsTaken(PillModel pill) {
-    setState(() {
-      pill.isTaken = true; // Mark pill as taken
-    });
+  void _markAsTaken(PillModel pill) async {
+    try {
+      await AlarmService.cancelAlarm(pill.id);
 
-    widget.onPillsUpdated(widget.pills);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('${pill.name} marked as taken'),
-        backgroundColor: Colors.green,
-      ),
-    );
+      setState(() {
+        pill.isTaken = true;
+      });
+
+      final updatedPills = List<PillModel>.from(widget.pills);
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      prefs.setStringList(
+        PILLS_KEY,
+        updatedPills.map((p) => p.toJson().toString()).toList(),
+      );
+
+      widget.onPillsUpdated(updatedPills);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${pill.name} marked as taken'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (e) {
+      print("Error while marking pill as taken: $e");
+    }
   }
 
   @override

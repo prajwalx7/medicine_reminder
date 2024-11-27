@@ -33,7 +33,6 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
 
   Future<void> _addMedicine() async {
     print("pressed");
-
     if (_nameController.text.isEmpty ||
         _dosageController.text.isEmpty ||
         timeControllers.every((controller) => controller.text.isEmpty) ||
