@@ -3,7 +3,6 @@ import 'package:alarm/alarm.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:medicine_reminder/screens/home_screen_wrapper.dart';
 import 'package:medicine_reminder/screens/login_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 

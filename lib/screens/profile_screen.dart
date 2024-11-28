@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:medicine_reminder/screens/login_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -13,11 +16,47 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   bool isEditing = false;
 
-  final TextEditingController nameController =
-      TextEditingController(text: "Dart Smith");
-  final TextEditingController ageController = TextEditingController(text: "22");
-  final TextEditingController genderController =
-      TextEditingController(text: "Male");
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController ageController = TextEditingController();
+  final TextEditingController genderController = TextEditingController();
+
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  void _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final user = _auth.currentUser;
+
+    nameController.text =
+        prefs.getString('name') ?? (user?.displayName ?? "Unknown");
+    ageController.text = prefs.getString('age') ?? "0";
+    genderController.text = prefs.getString('gender') ?? "Not Available";
+  }
+
+  Future<void> _saveUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('name', nameController.text);
+    await prefs.setString('age', ageController.text);
+    await prefs.setString('gender', genderController.text);
+  }
+
+  Future<void> _logOut() async {
+    try {
+      await _googleSignIn.signOut();
+      await _auth.signOut();
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: const Text("Error in Signing Out")));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +109,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               SizedBox(height: 10.h),
               TextButton.icon(
-                onPressed: () {
+                onPressed: () async {
+                  if (isEditing) {
+                    await _saveUserData();
+                  }
                   setState(() {
                     isEditing = !isEditing;
                   });
@@ -103,10 +145,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               // Logout
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LoginScreen()));
+                  _logOut();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xff16423C),

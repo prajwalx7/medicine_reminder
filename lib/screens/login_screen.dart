@@ -5,12 +5,19 @@ import 'package:flutter_svg/svg.dart';
 import 'package:medicine_reminder/screens/home_screen_wrapper.dart';
 import 'package:medicine_reminder/services/auth_service.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final AuthService _authService = AuthService();
+  bool isLoading = false;
+
+  @override
   Widget build(BuildContext context) {
-    final AuthService _authService = AuthService();
     return Scaffold(
       backgroundColor: const Color(0xffE9EFEC),
       body: Column(
@@ -18,24 +25,37 @@ class LoginScreen extends StatelessWidget {
           SizedBox(height: 40.h),
           SvgPicture.asset("assets/svg/start.svg", height: 400.h, width: 200.w),
           const Spacer(),
-          loginButton(context, "Login with Google", "assets/images/google.png",
-              () async {
-            User? user = await _authService.signInWithGoogle();
-            if (user != null) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HomeScreenWrapper(),
-                ),
-              );
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Error Signing In with Google"),
-                ),
-              );
-            }
-          }),
+          isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(
+                    color: Color(0xff16423C),
+                  ),
+                )
+              : loginButton(
+                  context, "Login in with Google", "assets/images/google.png",
+                  () async {
+                  // setState(() {
+                  //   isLoading = true;
+                  // });
+                  User? user = await _authService.signInWithGoogle();
+                  setState(() {
+                    isLoading = true;
+                  });
+                  if (user != null) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HomeScreenWrapper(),
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Error Signing In with Google"),
+                      ),
+                    );
+                  }
+                }),
           SizedBox(height: 40.h),
         ],
       ),
