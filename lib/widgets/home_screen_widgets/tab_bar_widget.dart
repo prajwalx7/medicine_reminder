@@ -1,12 +1,13 @@
+import 'package:MedTrack/constant.dart';
+import 'package:MedTrack/model/pill_model.dart';
+import 'package:MedTrack/services/alarm_service.dart';
+import 'package:MedTrack/widgets/home_screen_widgets/pill_container.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:medicine_reminder/constant.dart';
-import 'package:medicine_reminder/model/pill_model.dart';
-import 'package:medicine_reminder/services/alarm_service.dart';
-import 'package:medicine_reminder/widgets/home_screen_widgets/pill_container.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TabBarWidget extends StatefulWidget {
@@ -33,11 +34,6 @@ class _TabBarWidgetState extends State<TabBarWidget>
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
   }
-
-  // void _addNewPill(PillModel pill) {
-  //   // Update your pills list and call the callback function
-  //   widget.onPillsUpdated(widget.pills);
-  // }
 
   void _deletePill(BuildContext context, PillModel pill) async {
     AlarmService.cancelAlarm(pill.id);
@@ -227,7 +223,9 @@ class _TabBarWidgetState extends State<TabBarWidget>
                                   ),
                                 ],
                               ),
-                              child: PillContainer(pill: pill),
+                              child: PillContainer(
+                                pill: pill,
+                              ),
                             ),
                           );
                         },

@@ -1,18 +1,22 @@
+import 'package:MedTrack/model/pill_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
-import 'package:medicine_reminder/model/pill_model.dart';
 
-class PillContainer extends StatelessWidget {
+class PillContainer extends StatefulWidget {
   final PillModel pill;
 
   const PillContainer({super.key, required this.pill});
 
+  @override
+  State<PillContainer> createState() => _PillContainerState();
+}
+
+class _PillContainerState extends State<PillContainer> {
   String convertTimes(List<int> times) {
     String formattedTimes = "";
-
     for (var timestamp in times) {
       if (timestamp != 0) {
         int timestampInMilliseconds =
@@ -28,8 +32,7 @@ class PillContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var t = convertTimes(pill.intTime);
-    print("time : ${t}");
+    convertTimes(widget.pill.intTime);
     return Container(
       margin: EdgeInsets.only(bottom: 10.h),
       decoration: BoxDecoration(
@@ -57,7 +60,7 @@ class PillContainer extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.all(8.r),
                 child: SvgPicture.asset(
-                  'assets/svg/${pill.type}.svg',
+                  'assets/svg/${widget.pill.type}.svg',
                   height: 40.h,
                   width: 40.w,
                 ),
@@ -69,7 +72,7 @@ class PillContainer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    pill.name,
+                    widget.pill.name,
                     style: TextStyle(
                       fontSize: 18.sp,
                       fontFamily: 'zen',
@@ -79,14 +82,28 @@ class PillContainer extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   SizedBox(height: 8.h),
-                  Text(
-                    pill.dosage,
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      fontFamily: 'kanit',
-                      color: Colors.grey,
-                    ),
-                    overflow: TextOverflow.ellipsis,
+                  Row(
+                    children: [
+                      Text(
+                        widget.pill.dosage,
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontFamily: 'kanit',
+                          color: Colors.grey,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      SizedBox(width: 3.w),
+                      Text(
+                        'mg',
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontFamily: 'kanit',
+                          color: Colors.grey,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -100,7 +117,7 @@ class PillContainer extends StatelessWidget {
                 ),
                 SizedBox(width: 5.w),
                 Text(
-                  convertTimes(pill.intTime),
+                  convertTimes(widget.pill.intTime),
                   style: TextStyle(
                     fontSize: 16.sp,
                     fontFamily: 'kanit',

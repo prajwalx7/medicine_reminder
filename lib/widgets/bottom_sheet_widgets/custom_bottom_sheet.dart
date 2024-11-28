@@ -1,10 +1,10 @@
+import 'package:MedTrack/constant.dart';
+import 'package:MedTrack/model/pill_model.dart';
+import 'package:MedTrack/services/alarm_service.dart';
+import 'package:MedTrack/widgets/bottom_sheet_widgets/bottom_sheet_header.dart';
+import 'package:MedTrack/widgets/bottom_sheet_widgets/custom_text_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:medicine_reminder/constant.dart';
-import 'package:medicine_reminder/model/pill_model.dart';
-import 'package:medicine_reminder/services/alarm_service.dart';
-import 'package:medicine_reminder/widgets/bottom_sheet_widgets/bottom_sheet_header.dart';
-import 'package:medicine_reminder/widgets/bottom_sheet_widgets/custom_text_fields.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomBottomSheet extends StatefulWidget {
@@ -22,6 +22,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
   String _selectedType = 'pill';
   final List<TimeOfDay?> _selectedTimes = [null, null, null];
   final List<int> _intTime = [0, 0, 0];
+
 
   final List<bool> _selectedDays = List.generate(7, (index) => false);
 
@@ -63,6 +64,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
         type: _selectedType,
         name: _nameController.text,
         dosage: _dosageController.text,
+        
         selectedDays: _selectedDays,
         intTime: _intTime);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -72,11 +74,10 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
     if (tempPills != null) {
       pills = tempPills;
     }
-    print("pills : ${pills}");
     print("new pill : ${newPill.toJson().toString()}");
-    var s = await prefs
+    await prefs
         .setStringList(PILLS_KEY, [newPill.toJson().toString(), ...pills]);
-    print('status : $s');
+
     for (int i = 0; i < _selectedTimes.length; i++) {
       if (_selectedTimes[i] != null) {
         for (int dayIndex = 0; dayIndex < _selectedDays.length; dayIndex++) {

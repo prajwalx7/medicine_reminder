@@ -1,15 +1,18 @@
 import 'dart:io';
+import 'package:MedTrack/screens/home_screen_wrapper.dart';
+import 'package:MedTrack/screens/login_screen.dart';
+import 'package:MedTrack/services/auth_service.dart';
 import 'package:alarm/alarm.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:medicine_reminder/screens/login_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Alarm.init();
   await Firebase.initializeApp();
+  bool loggedIn = await AuthService.isLoggedIn();
 
   if (Platform.isAndroid) {
     final permission = await Permission.notification.request();
@@ -19,11 +22,12 @@ void main() async {
       print("Notification permission denied");
     }
   }
-  runApp(const MyApp());
+  runApp(MyApp(loggedIn: loggedIn));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool loggedIn;
+  const MyApp({super.key, required this.loggedIn});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +35,7 @@ class MyApp extends StatelessWidget {
       designSize: const Size(375, 812),
       builder: (context, child) => MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Medicine Reminder',
+        title: 'MedTrack',
         theme: ThemeData(
           textSelectionTheme: const TextSelectionThemeData(
             selectionColor: Colors.amber,
@@ -40,7 +44,7 @@ class MyApp extends StatelessWidget {
           primaryColor: const Color(0xff16423C),
           scaffoldBackgroundColor: const Color(0xffE9EFEC),
         ),
-        home: const LoginScreen(),
+        home: loggedIn ? const HomeScreenWrapper() : const LoginScreen(),
       ),
     );
   }

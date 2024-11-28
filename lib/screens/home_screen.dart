@@ -1,10 +1,10 @@
+import 'package:MedTrack/model/pill_model.dart';
+import 'package:MedTrack/widgets/bottom_sheet_widgets/custom_bottom_sheet.dart';
+import 'package:MedTrack/widgets/home_screen_widgets/header.dart';
+import 'package:MedTrack/widgets/home_screen_widgets/info_container_list.dart';
+import 'package:MedTrack/widgets/home_screen_widgets/tab_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:medicine_reminder/model/pill_model.dart';
-import 'package:medicine_reminder/widgets/bottom_sheet_widgets/custom_bottom_sheet.dart';
-import 'package:medicine_reminder/widgets/home_screen_widgets/header.dart';
-import 'package:medicine_reminder/widgets/home_screen_widgets/info_container_list.dart';
-import 'package:medicine_reminder/widgets/home_screen_widgets/tab_bar_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   final List<PillModel> pills;
@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
             builder: (context) {
               return FractionallySizedBox(
                 alignment: Alignment.bottomCenter,
-                heightFactor: 0.95,
+                heightFactor: 0.92,
                 child: CustomBottomSheet(
                   onAddPill: (pill) {
                     final updatedPills = List<PillModel>.from(widget.pills)

@@ -10,23 +10,24 @@ class CustomTextFields extends StatefulWidget {
   final List<bool> selectedDays;
   final timeCB;
 
-  const CustomTextFields(
-      {super.key,
-      required this.nameController,
-      required this.dosageController,
-      required this.timeControllers,
-      required this.selectedTimes,
-      required this.selectedDays,
-      required this.timeCB});
+  const CustomTextFields({
+    super.key,
+    required this.nameController,
+    required this.dosageController,
+    required this.timeControllers,
+    required this.selectedTimes,
+    required this.selectedDays,
+    required this.timeCB,
+  });
 
   @override
   State<CustomTextFields> createState() => _CustomTextFieldsState();
 }
 
 class _CustomTextFieldsState extends State<CustomTextFields> {
-  String _selectedUnit = "pills";
   bool _isDailySelected = false;
   final List<String> _days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  String selectedUnit = 'pills';
 
   Future<void> _selectTime(int index) async {
     final TimeOfDay? picked = await showTimePicker(
@@ -83,7 +84,6 @@ class _CustomTextFieldsState extends State<CustomTextFields> {
   void _toggleDay(int index) {
     setState(() {
       widget.selectedDays[index] = !widget.selectedDays[index];
-      // Update daily toggle based on all days selection
       _isDailySelected = widget.selectedDays.every((day) => day);
     });
   }
@@ -205,14 +205,6 @@ class _CustomTextFieldsState extends State<CustomTextFields> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            spreadRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
       ),
       padding: EdgeInsets.all(20.r),
       child: Column(
@@ -319,12 +311,13 @@ class _CustomTextFieldsState extends State<CustomTextFields> {
                   ),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
-                      dropdownColor: Colors.white,
-                      borderRadius: BorderRadius.circular(12.r),
-                      value: _selectedUnit,
-                      isExpanded: true,
-                      icon: const Icon(Icons.arrow_drop_down,
-                          color: Color(0xff16423C)),
+                      value: selectedUnit,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedUnit = newValue!;
+                        });
+                       
+                      },
                       items: ["pills", "capsules", "ml", "mg", "syringe"]
                           .map((String unit) {
                         return DropdownMenuItem<String>(
@@ -339,11 +332,6 @@ class _CustomTextFieldsState extends State<CustomTextFields> {
                           ),
                         );
                       }).toList(),
-                      onChanged: (String? value) {
-                        setState(() {
-                          _selectedUnit = value!;
-                        });
-                      },
                     ),
                   ),
                 ),
@@ -351,7 +339,15 @@ class _CustomTextFieldsState extends State<CustomTextFields> {
             ],
           ),
           SizedBox(height: 15.h),
-
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "*select at least one time",
+              style: TextStyle(
+                  fontSize: 12.sp, color: Colors.black54, fontFamily: 'kanit'),
+            ),
+          ),
+          SizedBox(height: 5.h),
           // Time Fields
           ...List.generate(
             widget.selectedTimes.length,

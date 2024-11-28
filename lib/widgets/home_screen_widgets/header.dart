@@ -1,7 +1,7 @@
+import 'package:MedTrack/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:medicine_reminder/screens/profile_screen.dart';
 
 class Header extends StatelessWidget {
   const Header({super.key});

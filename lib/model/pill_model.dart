@@ -3,9 +3,10 @@ class PillModel {
   final String type;
   final String name;
   final String dosage;
-  final List<bool> selectedDays; // Days selected for taking the pill
-  bool isTaken; // Whether the pill is taken or not
-  final List<int> intTime; // [hour, minute]
+
+  final List<bool> selectedDays;
+  bool isTaken;
+  final List<int> intTime;
 
   PillModel({
     required this.id,
