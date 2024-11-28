@@ -12,7 +12,20 @@
           "package_name": "com.example.medicine_reminder"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "865659555124-rot1lhiaiunbhblitisup4t1lc6s2g9h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.medicine_reminder",
+            "certificate_hash": "a7831ab03250f31de66524067367ec9bdb4e7a37"
+          }
+        },
+        {
+          "client_id": "865659555124-l3mb4ij28jtoth9g5oshoklj1n79udgb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAdxrrEE_tYoSVOYcytxAZstqEJm8xHGcc"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "865659555124-l3mb4ij28jtoth9g5oshoklj1n79udgb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

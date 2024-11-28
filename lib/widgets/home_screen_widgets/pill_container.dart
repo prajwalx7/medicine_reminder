@@ -15,22 +15,15 @@ class PillContainer extends StatelessWidget {
 
     for (var timestamp in times) {
       if (timestamp != 0) {
-        // Convert microseconds to milliseconds if needed
         int timestampInMilliseconds =
             (timestamp > 999999999999) ? (timestamp / 1000).round() : timestamp;
-
         DateTime dateTime =
             DateTime.fromMillisecondsSinceEpoch(timestampInMilliseconds);
-
-        // Format the time in 12-hour format with AM/PM
         String timeString = DateFormat('h:mm a').format(dateTime);
-
-        // Add to the formatted times string
         formattedTimes += "$timeString\n";
       }
     }
-
-    return formattedTimes.trim(); // Trim to remove the last newline
+    return formattedTimes.trim();
   }
 
   @override
@@ -112,16 +105,6 @@ class PillContainer extends StatelessWidget {
                     fontSize: 16.sp,
                     fontFamily: 'kanit',
                     color: const Color(0xff16423C),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    pill.isTaken = !pill.isTaken;
-                  },
-                  child: Icon(
-                    pill.isTaken ? Icons.check_circle : Icons.circle_outlined,
-                    color: pill.isTaken ? Colors.green : Colors.grey,
-                    size: 24.sp,
                   ),
                 ),
               ],

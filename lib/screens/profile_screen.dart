@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:medicine_reminder/screens/mobile_number_screen.dart';
+import 'package:medicine_reminder/screens/login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -106,7 +106,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => MobileNumberScreen()));
+                          builder: (context) => const LoginScreen()));
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xff16423C),
