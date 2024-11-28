@@ -94,8 +94,9 @@ class _PillContainerState extends State<PillContainer> {
                         overflow: TextOverflow.ellipsis,
                       ),
                       SizedBox(width: 3.w),
+                      // here i want to display the value from drop down
                       Text(
-                        'mg',
+                        widget.pill.unit,
                         style: TextStyle(
                           fontSize: 14.sp,
                           fontFamily: 'kanit',

@@ -3,7 +3,7 @@ class PillModel {
   final String type;
   final String name;
   final String dosage;
-
+  final String unit;
   final List<bool> selectedDays;
   bool isTaken;
   final List<int> intTime;
@@ -13,6 +13,7 @@ class PillModel {
     required this.type,
     required this.name,
     required this.dosage,
+    required this.unit,
     required this.selectedDays,
     required this.intTime,
     this.isTaken = false,
@@ -25,6 +26,7 @@ class PillModel {
       type: json['type'],
       name: json['name'],
       dosage: json['dosage'],
+      unit: json['unit'],
       selectedDays: List<bool>.from(json['selectedDays']),
       intTime: List<int>.from(json['intTime']),
       isTaken: json['isTaken'] ?? false,
@@ -38,6 +40,7 @@ class PillModel {
       'type': type,
       'name': name,
       'dosage': dosage,
+      'unit' : unit,
       'selectedDays': selectedDays,
       'intTime': intTime,
       'isTaken': isTaken,

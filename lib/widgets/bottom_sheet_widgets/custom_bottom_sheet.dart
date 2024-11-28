@@ -22,7 +22,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
   String _selectedType = 'pill';
   final List<TimeOfDay?> _selectedTimes = [null, null, null];
   final List<int> _intTime = [0, 0, 0];
-
+  String selectedUnit = 'pills';
 
   final List<bool> _selectedDays = List.generate(7, (index) => false);
 
@@ -64,7 +64,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
         type: _selectedType,
         name: _nameController.text,
         dosage: _dosageController.text,
-        
+        unit: selectedUnit,
         selectedDays: _selectedDays,
         intTime: _intTime);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -119,6 +119,12 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
         .microsecondsSinceEpoch;
   }
 
+  void _onUnitChanged(String unit) {
+    setState(() {
+      selectedUnit = unit;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -140,6 +146,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
               dosageController: _dosageController,
               timeControllers: timeControllers,
               selectedTimes: _selectedTimes,
+              onUnitChanged: _onUnitChanged,
               selectedDays: _selectedDays,
               timeCB: (TimeOfDay time, index) {
                 _intTime[index] = timeOfDayToDateTime(time);

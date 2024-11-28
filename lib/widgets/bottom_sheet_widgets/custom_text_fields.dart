@@ -7,6 +7,7 @@ class CustomTextFields extends StatefulWidget {
   final TextEditingController dosageController;
   final List<TextEditingController> timeControllers;
   final List<TimeOfDay?> selectedTimes;
+  final Function(String)? onUnitChanged;
   final List<bool> selectedDays;
   final timeCB;
 
@@ -16,6 +17,7 @@ class CustomTextFields extends StatefulWidget {
     required this.dosageController,
     required this.timeControllers,
     required this.selectedTimes,
+    this.onUnitChanged,
     required this.selectedDays,
     required this.timeCB,
   });
@@ -315,8 +317,8 @@ class _CustomTextFieldsState extends State<CustomTextFields> {
                       onChanged: (String? newValue) {
                         setState(() {
                           selectedUnit = newValue!;
+                          widget.onUnitChanged?.call(newValue); 
                         });
-                       
                       },
                       items: ["pills", "capsules", "ml", "mg", "syringe"]
                           .map((String unit) {
