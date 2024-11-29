@@ -47,8 +47,11 @@ class _TabBarWidgetState extends State<TabBarWidget>
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('${pill.name} deleted'),
-        backgroundColor: const Color(0xff6A9C89),
+        content: Text(
+          '${pill.name} deleted',
+          style: const TextStyle(fontFamily: 'kanit'),
+        ),
+        backgroundColor: Colors.red.shade400,
       ),
     );
   }
@@ -73,8 +76,11 @@ class _TabBarWidgetState extends State<TabBarWidget>
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('${pill.name} marked as taken'),
-          backgroundColor: Colors.green,
+          content: Text(
+            '${pill.name} marked as taken',
+            style: const TextStyle(fontFamily: 'kanit'),
+          ),
+          backgroundColor: Colors.green.shade400,
         ),
       );
     } catch (e) {
@@ -84,8 +90,10 @@ class _TabBarWidgetState extends State<TabBarWidget>
 
   @override
   Widget build(BuildContext context) {
-    final notTakenPills = widget.pills.where((pill) => !pill.isTaken).toList();
-    final takenPills = widget.pills.where((pill) => pill.isTaken).toList();
+    final notTakenPills =
+        widget.pills.where((pill) => !pill.isTaken).toList().reversed.toList();
+    final takenPills =
+        widget.pills.where((pill) => pill.isTaken).toList().reversed.toList();
 
     return Column(
       children: [
