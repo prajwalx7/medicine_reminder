@@ -141,13 +141,13 @@ class _TabBarWidgetState extends State<TabBarWidget>
                         gradientFractionOnStart: 0.1,
                         gradientFractionOnEnd: 0.1,
                         child: ListView.builder(
-                          padding: EdgeInsets.only(bottom: 80.h),
+                          padding: EdgeInsets.only(bottom: 60.h),
                           controller: controller,
                           itemCount: notTakenPills.length,
                           itemBuilder: (context, index) {
                             final pill = notTakenPills[index];
                             return Padding(
-                              padding: EdgeInsets.only(bottom: 10.0.w),
+                              padding: EdgeInsets.only(bottom: 8.0.w),
                               child: Slidable(
                                 key: Key(pill.id.toString()),
                                 endActionPane: ActionPane(
@@ -192,43 +192,51 @@ class _TabBarWidgetState extends State<TabBarWidget>
                   ? Center(
                       child: Text(
                         "No pills marked as taken",
-                        style: TextStyle(fontSize: 18.sp, color: Colors.grey),
+                        style: TextStyle(
+                            fontSize: 18.sp,
+                            color: Colors.grey,
+                            fontFamily: 'kanit'),
                       ),
                     )
                   : Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10.0.w),
-                      child: ListView.builder(
-                        padding: EdgeInsets.only(bottom: 80.h),
-                        itemCount: takenPills.length,
-                        itemBuilder: (context, index) {
-                          final pill = takenPills[index];
-                          return Padding(
-                            padding: EdgeInsets.only(bottom: 10.0.w),
-                            child: Slidable(
-                              key: Key(pill.id.toString()),
-                              endActionPane: ActionPane(
-                                motion: const ScrollMotion(),
-                                extentRatio: 0.30,
-                                children: [
-                                  SizedBox(width: 5.w),
-                                  GestureDetector(
-                                    onTap: () {
-                                      _deletePill(context, pill);
-                                    },
-                                    child: _buildContainer(
-                                      icon: Iconsax.trash,
-                                      color: Colors.red.shade400,
-                                      label: "Delete",
+                      child: FadingEdgeScrollView.fromScrollView(
+                        gradientFractionOnStart: 0.1,
+                        gradientFractionOnEnd: 0.1,
+                        child: ListView.builder(
+                          controller: controller,
+                          padding: EdgeInsets.only(bottom: 60.h),
+                          itemCount: takenPills.length,
+                          itemBuilder: (context, index) {
+                            final pill = takenPills[index];
+                            return Padding(
+                              padding: EdgeInsets.only(bottom: 8.0.w),
+                              child: Slidable(
+                                key: Key(pill.id.toString()),
+                                endActionPane: ActionPane(
+                                  motion: const ScrollMotion(),
+                                  extentRatio: 0.30,
+                                  children: [
+                                    SizedBox(width: 5.w),
+                                    GestureDetector(
+                                      onTap: () {
+                                        _deletePill(context, pill);
+                                      },
+                                      child: _buildContainer(
+                                        icon: Iconsax.trash,
+                                        color: Colors.red.shade400,
+                                        label: "Delete",
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
+                                child: PillContainer(
+                                  pill: pill,
+                                ),
                               ),
-                              child: PillContainer(
-                                pill: pill,
-                              ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
                     ),
             ],
@@ -246,9 +254,9 @@ class _TabBarWidgetState extends State<TabBarWidget>
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
+          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 19.h),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(16.r),
             color: color,
           ),
           child: Column(

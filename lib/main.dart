@@ -15,12 +15,7 @@ void main() async {
   bool loggedIn = await AuthService.isLoggedIn();
 
   if (Platform.isAndroid) {
-    final permission = await Permission.notification.request();
-    if (permission.isGranted) {
-      print("Notification permission granted");
-    } else {
-      print("Notification permission denied");
-    }
+    await Permission.notification.request();
   }
   runApp(MyApp(loggedIn: loggedIn));
 }

@@ -313,11 +313,13 @@ class _CustomTextFieldsState extends State<CustomTextFields> {
                   ),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
+                      dropdownColor: const Color(0xffE9EFEC),
+                      borderRadius: BorderRadius.circular(12),
                       value: selectedUnit,
                       onChanged: (String? newValue) {
                         setState(() {
                           selectedUnit = newValue!;
-                          widget.onUnitChanged?.call(newValue); 
+                          widget.onUnitChanged?.call(newValue);
                         });
                       },
                       items: ["pills", "capsules", "ml", "mg", "syringe"]
