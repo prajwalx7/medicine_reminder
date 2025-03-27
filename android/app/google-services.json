@@ -1,41 +1,41 @@
 {
   "project_info": {
-    "project_number": "865659555124",
-    "project_id": "medicine-reminder-e5fee",
-    "storage_bucket": "medicine-reminder-e5fee.firebasestorage.app"
+    "project_number": "633634675590",
+    "project_id": "medtrack-10c3b",
+    "storage_bucket": "medtrack-10c3b.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:865659555124:android:66ff65e1cdaff8225b2961",
+        "mobilesdk_app_id": "1:633634675590:android:6e48cf64be5cb4d4e1ea07",
         "android_client_info": {
           "package_name": "com.example.medicine_reminder"
         }
       },
       "oauth_client": [
         {
-          "client_id": "865659555124-rot1lhiaiunbhblitisup4t1lc6s2g9h.apps.googleusercontent.com",
+          "client_id": "633634675590-kg9etmmsgpff4g4v3iav5nqou45dq66d.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.medicine_reminder",
-            "certificate_hash": "a7831ab03250f31de66524067367ec9bdb4e7a37"
+            "certificate_hash": "28dd4132c068dbe18ee1cbfd7f0fc0164c25f9a8"
           }
         },
         {
-          "client_id": "865659555124-l3mb4ij28jtoth9g5oshoklj1n79udgb.apps.googleusercontent.com",
+          "client_id": "633634675590-9f4cvi2l4839mmqfqj432cql3vmp562o.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAdxrrEE_tYoSVOYcytxAZstqEJm8xHGcc"
+          "current_key": "AIzaSyDAr7s1f-Hy_eB86amKB0N4LbaBv4Fz5mM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "865659555124-l3mb4ij28jtoth9g5oshoklj1n79udgb.apps.googleusercontent.com",
+              "client_id": "633634675590-9f4cvi2l4839mmqfqj432cql3vmp562o.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
